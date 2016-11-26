@@ -5,8 +5,8 @@ bot = telebot.TeleBot(config.token)
 #fjtylui'
 #Обработчик команд start и end
 @bot.message_handler(commands=['start'])
-def say_hello(message):
-    bot.send_message(message.chat.id, "Привет)")
+def say_hello(message, update):
+    bot.send_message(update.message.chat.id, "Привет)")
 
 @bot.message_handler(commands=['finish'])
 def say_bye(message):
