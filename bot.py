@@ -27,8 +27,10 @@ def catch_name(message):
     bot.send_message(message.chat.id, "Здравствуйте, " + name + "! Введите адрес доставки")
 
 @bot.message_handler(content_types=["text"])
-def catch_name(message):
-    address = message.text
+def catch_address(message):
+    p = message.text
+    pp = p.split(' ')
+    address = pp[0]
     bot.send_message(message.chat.id, address)
 
 if __name__ == '__main__':
