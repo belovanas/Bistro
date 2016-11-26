@@ -7,12 +7,17 @@ token = '301583096:AAFIj_0jfY5Xoy8WivDoieZKSczIDCGO3zg'
 
 bot = telebot.TeleBot(token)
 
+#Константы
 o_status = ""
+order = ""
+feedback = ""
 
 #Обработчик команды start
 @bot.message_handler(commands=['start'])
 def say_hello(message):
-    bot.send_message(message.chat.id, "Привет)")
+    bot.send_message(message.chat.id,
+                     "Здравствуйте! Я бот службы доставки ресторанов Рис (г. Ростов-на-Дону). Вызовите"
+                     " /signup для создания заказа.")
 
 @bot.message_handler(commands=['help'])
 def print_commands(message):
@@ -32,6 +37,11 @@ def say_bye(message):
     bot.send_message(message.chat.id, "Пока!")
     bot.leave_chat(message.chat.id)
 
+@bot.message_handler(commands=['leavefeedback'])
+def invitation_to_feedback(message):
+    bot.send_message(message.chat.id, "Пожалуйста, напишите Ваше мнение по работе бота.")
+    global feedback
+    feedback = message.text
 
 #Обработчик команды SignUp
 @bot.message_handler(commands=['signup'])
