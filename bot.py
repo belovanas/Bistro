@@ -23,15 +23,17 @@ def invitation_to_registration(message):
 
 @bot.message_handler(content_types=["text"])
 def catch_name(message):
-    name = message.text
+    p = message.text
+    pp = p.split(' ')
+    name = pp[0]
     bot.send_message(message.chat.id, "Здравствуйте, " + name + "! Введите адрес доставки")
+    return
 
 @bot.message_handler(content_types=["text"])
 def catch_address(message):
-    p = message.text
-    pp = p.split(' ')
-    address = pp[0]
+    address = message.text
     bot.send_message(message.chat.id, address)
+    return 
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
