@@ -3,7 +3,7 @@ import sqlite3
 import datetime
 
 #Токен созданного бота
-token = '301583096:AAFIj_0jfY5Xoy8WivDoieZKSczIDCGO3zg'
+token = '284801303:AAEJjTcSy9wzPed6SDQuVxlTibpD0XlCENA'
 
 bot = telebot.TeleBot(token)
 
@@ -39,9 +39,25 @@ def say_bye(message):
 
 @bot.message_handler(commands=['leavefeedback'])
 def invitation_to_feedback(message):
-    bot.send_message(message.chat.id, "Пожалуйста, напишите Ваше мнение по работе бота.")
-    global feedback
-    feedback = message.text
+    bot.send_message(message.chat.id, "Пожалуйста, напишите Ваше мнение по работе бота в формате Отзыв: *Ваш отзыв*.")
+
+
+@bot.message_handler(regexp="Отзыв:")
+def leave_feedback(message):
+    feedback = ""
+    p = message.text
+    pp = p.split(' ')
+    i = 1
+    for pp in p:
+        feedback = feedback + pp
+    conn = sqlite3.connect('BistroBotBase.sqlite')
+    c = conn.cursor()
+    owner = "whoever"
+    c.execute("INSERT INTO feedbacks (owner, feedback) VALUES ('%s', '%s')" % (owner, feedback))
+    conn.commit()
+    c.close()
+    conn.close()
+    bot.send_message(message.chat.id, "Спасибо! Ваш отзыв важен для нас.")
 
 #Обработчик команды SignUp
 @bot.message_handler(commands=['signup'])
@@ -77,9 +93,8 @@ def catch_data(message):
                      "Время заказа: " + str(datetime.datetime.now()) + "\n" +
                      "Имя клиента: " + name + "\n" +
                      "Адрес доставки: " + address + "\n" +
-                     "Телефон: " + phone + "\n"
-                                           "Блюда: "  + "\n"
-                                                               "Результат обработки заказов будет отправлен Вам на почту.")
+                     "Телефон: " + phone + "\n" +
+                     "Результат обработки заказов будет отправлен Вам на почту.")
     global o_status
     o_status = "Обработка"
 
