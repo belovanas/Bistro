@@ -1,7 +1,8 @@
 import telebot
 import sqlite3
+import datetime
 
-token = '301583096:AAFIj_0jfY5Xoy8WivDoieZKSczIDCGO3zg'
+token = '284801303:AAEJjTcSy9wzPed6SDQuVxlTibpD0XlCENA'
 
 bot = telebot.TeleBot(token)
 
@@ -9,6 +10,8 @@ name = ""
 address = ""
 email = ""
 phone = ""
+o_status = ""
+order=""
 
 
 #Обработчик команд start и end
@@ -59,7 +62,30 @@ def catch_data(message):
     address = pp[4]
     registration_finished(message)
 
+def registration_finished(message):
+    add_to_base(name, phone, email, address)
+    bot.send_message(message.chat.id, "Регистрация завершена! Ваш заказ поступил в обработку!\n" +
+                     "Время заказа: " + str(datetime.datetime.now()) + "\n" +
+                     "Имя клиента: " + name + "\n" +
+                     "Адрес доставки: " + address + "\n" +
+                     "Телефон: " + phone + "\n"
+                     "Блюда: " + order + "\n"
+                     "Результат обработки заказов будет отправлен Вам на почту.")
+    global o_status
+    o_status = "Обработка"
+
+
+@bot.message_handler(commands=['status'])
+def order_status(message):
+    if (o_status == "Обработка"):
+        bot.send_message(message.chat.id, "Заказ обрабатывается.")
+    if (o_status == "Выполнение"):
+        bot.send_message(message.chat.id, "Заказ выполняется.")
+    if (o_status == "Доставка"):
+        bot.send_message(message.chat.id, "Заказ доставляется.")
+    if (o_status == ""):
+        bot.send_message(message.chat.id, "Нет текущего заказа.")
+
 
 if __name__ == '__main__':
    bot.polling(none_stop=True)
-
