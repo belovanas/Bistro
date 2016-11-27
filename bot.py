@@ -7,6 +7,7 @@ import smtplib
 import sys
 import codecs
 import mail
+import time
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 #Токен созданного бота
@@ -86,6 +87,13 @@ def add_to_base(username, userphone, usermail, useraddress):
     c.close()
     conn.close()
 
+def change_status():
+    time.sleep(15)
+    global o_status
+    o_status = "Выполнение"
+    global o_status
+    time.sleep(15)
+    o_status = "Доставка"
 
 @bot.message_handler(regexp="Регистрация: ")
 def catch_data(message):
@@ -106,6 +114,7 @@ def catch_data(message):
     global o_status
     o_status = "Обработка"
     mail.sendmail(email, name)
+    change_status()
 
 
 
