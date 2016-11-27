@@ -1,6 +1,13 @@
+# -- coding: utf-8 --
+
 import telebot
 import sqlite3
 import datetime
+import smtplib
+import sys
+import codecs
+import mail
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
 
 #Токен созданного бота
 token = '284801303:AAEJjTcSy9wzPed6SDQuVxlTibpD0XlCENA'
@@ -94,9 +101,13 @@ def catch_data(message):
                      "Имя клиента: " + name + "\n" +
                      "Адрес доставки: " + address + "\n" +
                      "Телефон: " + phone + "\n" +
+                     "Почта: " + email + "\n" +
                      "Результат обработки заказов будет отправлен Вам на почту.")
     global o_status
     o_status = "Обработка"
+    mail.sendmail(email, name)
+
+
 
 @bot.message_handler(commands=['status'])
 def order_status(message):
@@ -108,6 +119,8 @@ def order_status(message):
         bot.send_message(message.chat.id, "Заказ доставляется.")
     if (o_status == ""):
         bot.send_message(message.chat.id, "Нет текущего заказа.")
+
+
 
 if __name__ == '__main__':
    bot.polling(none_stop=True)
